@@ -11,20 +11,21 @@ namespace ByteBank
                 //Metodo();
                 new ContaCorrente(10, 0);
             }
-            catch (DivideByZeroException erro)
+            catch (DivideByZeroException e)
             {
                 Console.WriteLine("Não é possível dividir por zero");
-                Console.WriteLine(erro.StackTrace);
+                Console.WriteLine(e.StackTrace);
             }
-            catch (ArgumentException erro)
+            catch (ArgumentException e)
             {
+                Console.WriteLine("Argumento com problema: " + e.ParamName);
                 Console.WriteLine("Ocorreu uma exceção do tipo ArgumentException");
-                Console.WriteLine(erro.Message);
+                Console.WriteLine(e.Message);
             }
-            catch (Exception erro)
+            catch (Exception e)
             {
-                Console.WriteLine(erro.Message);
-                Console.WriteLine(erro.StackTrace);
+                Console.WriteLine(e.Message);
+                Console.WriteLine(e.StackTrace);
             }
 
             Console.ReadLine();

@@ -7,7 +7,11 @@ namespace ByteBank
         public Cliente Titular { get; set; }
 
         public static int TotalDeContasCriadas { get; private set; }
+        public double TaxaOperacao { get; private set; }
 
+        //quando não colocamos o set;
+        //na prop ele gera esse atributo
+        //abaixo \/
         //private readonly int _agencia;
         public int Agencia { get; }
         public int Numero { get; }
@@ -34,29 +38,34 @@ namespace ByteBank
         {
             if(agencia <= 0)
             {
-                throw new ArgumentException("O argumento agência deve ser maior que 0.");
+                throw new ArgumentException("O argumento agência deve ser maior que 0.", nameof(agencia));
             }
 
             if(numero <= 0)
             {
-                throw new ArgumentException("O argumento número deve ser maior que 0.");
+                throw new ArgumentException("O argumento número deve ser maior que 0.", nameof(numero));
             }
 
             Agencia = agencia;
             Numero = numero;
 
             TotalDeContasCriadas++;
+            TaxaOperacao = 30 / TotalDeContasCriadas;
         }
 
-        public bool Sacar(double valor)
+        public void Sacar(double valor)
         {
+            if (valor < 0)
+            {
+                throw new ArgumentException("Valor inválido para o saque", nameof(valor));
+            }
+
             if (_saldo < valor)
             {
-                return false;
+                throw new SaldoInsuficienteException(_saldo, valor);
             }
 
             _saldo -= valor;
-            return true;
         }
 
         public void Depositar(double valor)
@@ -64,16 +73,10 @@ namespace ByteBank
             _saldo += valor;
         }
 
-        public bool Transferir(double valor, ContaCorrente contaDestino)
+        public void Transferir(double valor, ContaCorrente contaDestino)
         {
-            if (_saldo < valor)
-            {
-                return false;
-            }
-
-            _saldo -= valor;
+            Sacar(valor);
             contaDestino.Depositar(valor);
-            return true;
         }
     }
 }
