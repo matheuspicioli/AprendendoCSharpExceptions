@@ -7,7 +7,10 @@ namespace ByteBank
         public Cliente Titular { get; set; }
 
         public static int TotalDeContasCriadas { get; private set; }
-        public double TaxaOperacao { get; private set; }
+        public static int TaxaOperacao;
+
+        public int ContadorSaquesNaoPermitido { get; private set; }
+        public int ContadorTransferenciasNaoPermitidas { get; private set; }
 
         //quando não colocamos o set;
         //na prop ele gera esse atributo
@@ -62,6 +65,7 @@ namespace ByteBank
 
             if (_saldo < valor)
             {
+                ContadorSaquesNaoPermitido++;
                 throw new SaldoInsuficienteException(_saldo, valor);
             }
 
@@ -75,7 +79,20 @@ namespace ByteBank
 
         public void Transferir(double valor, ContaCorrente contaDestino)
         {
-            Sacar(valor);
+            if(valor < 0)
+            {
+                throw new ArgumentException("Valor inválido para a transferência", nameof(valor));
+            }
+
+            try
+            {
+                Sacar(valor);
+            } catch (SaldoInsuficienteException e)
+            {
+                ContadorTransferenciasNaoPermitidas++;
+                throw new OperacaoFinanceiraException("Operação não realizada", e);
+            }
+            
             contaDestino.Depositar(valor);
         }
     }

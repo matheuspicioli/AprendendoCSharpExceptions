@@ -8,26 +8,23 @@ namespace ByteBank
         {
             try
             {
-                //Metodo();
-                new ContaCorrente(10, 0);
-            }
-            catch (DivideByZeroException e)
-            {
-                Console.WriteLine("Não é possível dividir por zero");
-                Console.WriteLine(e.StackTrace);
-            }
-            catch (ArgumentException e)
-            {
-                Console.WriteLine("Argumento com problema: " + e.ParamName);
-                Console.WriteLine("Ocorreu uma exceção do tipo ArgumentException");
-                Console.WriteLine(e.Message);
-            }
-            catch (Exception e)
+                ContaCorrente conta1 = new ContaCorrente(768, 7687150);
+                ContaCorrente conta2 = new ContaCorrente(768, 7687151);
+                //conta1.Transferir(10000, conta2);
+                conta1.Sacar(10000);
+            } catch (OperacaoFinanceiraException e)
             {
                 Console.WriteLine(e.Message);
                 Console.WriteLine(e.StackTrace);
+                Console.WriteLine();
+
+                //Console.WriteLine("Informações da INNER EXCEPTION:");
+                //Console.WriteLine(e.InnerException.Message);
+                //Console.WriteLine(e.InnerException.StackTrace);
             }
 
+            Console.WriteLine();
+            Console.WriteLine("Execução finalizada. Tecle enter p/ sair");
             Console.ReadLine();
         }
 
