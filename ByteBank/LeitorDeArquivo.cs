@@ -27,14 +27,9 @@ namespace ByteBank
             return "Linha do arquivo";
         }
 
-        public void Fechar()
-        {
-            Console.WriteLine("Fechando arquivo...");
-        }
-
         public void Dispose()
         {
-            Fechar();
+            Console.WriteLine("Fechando arquivo...");
         }
     }
 }
