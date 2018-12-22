@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 
 namespace ByteBank
 {
@@ -8,11 +9,51 @@ namespace ByteBank
         {
             try
             {
+                CarregarContas();
+            }
+            catch(Exception)
+            {
+                Console.WriteLine("EXCEÇÃO CAPTURADA NO MÉTODO MAIN()");
+            }
+
+            Console.WriteLine("Execução finalizada. Tecle enter p/ sair");
+            Console.ReadLine();
+        }
+
+        private static void CarregarContas()
+        {
+            using (LeitorDeArquivo leitor = new LeitorDeArquivo("contas.txt"))
+            {
+                leitor.LerProximaLinha();
+            }
+
+            // --------------------
+            //LeitorDeArquivo leitor = null;
+            //try
+            //{
+            //    leitor = new LeitorDeArquivo("contas.txt");
+            //    leitor.LerProximaLinha();
+            //    leitor.LerProximaLinha();
+            //}
+            //finally
+            //{
+            //    if (leitor != null)
+            //    {
+            //        leitor.Fechar();
+            //    }
+            //}
+        }
+
+        private static void TestaInnerException()
+        {
+            try
+            {
                 ContaCorrente conta1 = new ContaCorrente(768, 7687150);
                 ContaCorrente conta2 = new ContaCorrente(768, 7687151);
                 //conta1.Transferir(10000, conta2);
                 conta1.Sacar(10000);
-            } catch (OperacaoFinanceiraException e)
+            }
+            catch (OperacaoFinanceiraException e)
             {
                 Console.WriteLine(e.Message);
                 Console.WriteLine(e.StackTrace);
@@ -24,8 +65,6 @@ namespace ByteBank
             }
 
             Console.WriteLine();
-            Console.WriteLine("Execução finalizada. Tecle enter p/ sair");
-            Console.ReadLine();
         }
 
         private static void Metodo()
